@@ -1,15 +1,13 @@
-package one.projectify.plugins
+package one.projectify
 
-import io.ktor.server.plugins.cachingheaders.*
-import io.ktor.http.content.*
 import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.cachingheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.forwardedheaders.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
 
 fun Application.configureHTTP() {
     install(CachingHeaders) {
