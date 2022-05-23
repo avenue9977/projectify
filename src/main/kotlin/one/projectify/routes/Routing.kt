@@ -1,11 +1,10 @@
-package one.projectify.plugins
+package one.projectify.routes
 
-import io.ktor.server.routing.*
 import io.ktor.http.*
-import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
-import io.ktor.server.request.*
+import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     install(StatusPages) {
@@ -15,7 +14,6 @@ fun Application.configureRouting() {
         exception<AuthorizationException> { call, cause ->
             call.respond(HttpStatusCode.Forbidden)
         }
-
     }
 
     routing {
