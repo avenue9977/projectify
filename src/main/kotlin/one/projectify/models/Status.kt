@@ -1,15 +1,17 @@
 package one.projectify.models
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-data class Status(
-    val id: String,
-    val name: String
-)
+class Status(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<Status>(Statuses)
 
-object Statuses : Table() {
-    val id = uuid("id").autoGenerate()
+    val name: String by Statuses.name
+}
+
+object Statuses : UUIDTable() {
     val name = varchar("name", length = 50)
-
-    override val primaryKey = PrimaryKey(id, name = "PK_Status_ID")
 }

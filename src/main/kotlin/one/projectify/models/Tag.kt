@@ -1,17 +1,19 @@
 package one.projectify.models
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-data class Tag(
-    val id: String,
-    val name: String,
-    val dateCreated: Long
-)
+class Tag(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<Tag>(Tags)
 
-object Tags : Table() {
-    val id = uuid("id").autoGenerate()
+    var name: String by Tags.name
+    var dateCreated: Long by Tags.dateCreated
+}
+
+object Tags : UUIDTable("tags") {
     val name = varchar("name", length = 50)
     val dateCreated = long("date_created")
-
-    override val primaryKey = PrimaryKey(id, name = "PK_Tag_ID")
 }

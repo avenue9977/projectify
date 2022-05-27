@@ -1,19 +1,30 @@
 package one.projectify.models
 
-import org.jetbrains.exposed.sql.Table
+import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-data class Team(
-    val id: String,
+@Serializable
+data class TeamDTO(
     val name: String,
-    val description: String?,
+    val description: String? = null,
     val dateCreated: Long
 )
 
-object Teams : Table() {
-    val id = uuid("id").autoGenerate()
+class Team(id: EntityID<UUID>) : UUIDEntity(id), SerializableEntity<TeamDTO> {
+    companion object : UUIDEntityClass<Team>(Teams)
+
+    var name: String by Teams.name
+    var description: String? by Teams.description
+    var dateCreated: Long by Teams.dateCreated
+    override fun createDTO(): TeamDTO = TeamDTO(name = name, description = description, dateCreated = dateCreated)
+}
+
+object Teams : UUIDTable("teams") {
     val name = varchar("name", length = 50)
     val description = varchar("description", length = 200).nullable()
     val dateCreated = long("date_created")
-
-    override val primaryKey = PrimaryKey(id, name = "PK_Team_ID")
 }

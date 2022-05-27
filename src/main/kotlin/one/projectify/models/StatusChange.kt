@@ -1,17 +1,19 @@
 package one.projectify.models
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-data class StatusChange(
-    val id: String,
-    val name: String,
-    val userId: String?
-)
+class StatusChange(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<StatusChange>(StatusChanges)
 
-object StatusCanges : Table() {
-    val id = uuid("id").autoGenerate()
+    var name: String by StatusChanges.name
+    var userId: UUID? by StatusChanges.userId
+}
+
+object StatusChanges : UUIDTable("status_changes") {
     val name = varchar("name", length = 50)
-    val userId = (uuid("user_id") references Users.id).nullable()
-
-    override val primaryKey = PrimaryKey(id, name = "PK_StatusChange_ID")
+    val userId = (uuid("user_id").references(Users.id)).nullable()
 }

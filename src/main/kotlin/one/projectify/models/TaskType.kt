@@ -1,15 +1,17 @@
 package one.projectify.models
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.UUIDEntity
+import org.jetbrains.exposed.dao.UUIDEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
-data class TaskType(
-    val id: String,
-    val name: String
-)
+class TaskType(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<TaskType>(TaskTypes)
 
-object TaskTypes : Table() {
-    val id = uuid("id").autoGenerate()
+    var name by TaskTypes.id
+}
+
+object TaskTypes : UUIDTable("task_types") {
     val name = varchar("name", length = 50)
-
-    override val primaryKey = PrimaryKey(id, name = "PK_TaskType_ID")
 }
