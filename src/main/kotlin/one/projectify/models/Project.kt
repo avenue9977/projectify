@@ -1,12 +1,24 @@
 package one.projectify.models
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
-class Project(id: EntityID<UUID>) : UUIDEntity(id) {
+@Serializable
+data class ProjectDTO(
+    val id: String,
+    val name: String,
+    val description: String? = null,
+    val dateCreated: Long,
+    val dueDate: Long? = null,
+    val createdBy: String,
+    val teamId: String?,
+)
+
+class Project(id: EntityID<UUID>) : UUIDEntity(id), SerializableEntity<ProjectDTO> {
     companion object : UUIDEntityClass<Project>(Projects)
 
     var name: String by Projects.name
@@ -15,6 +27,15 @@ class Project(id: EntityID<UUID>) : UUIDEntity(id) {
     var dueDate: Long? by Projects.dueDate
     var createdBy: UUID by Projects.createdBy
     var teamId: UUID? by Projects.teamId
+    override fun createDTO() = ProjectDTO(
+        id = id.toString(),
+        name = name,
+        description = description,
+        dateCreated = dateCreated,
+        dueDate = dueDate,
+        createdBy = createdBy.toString(),
+        teamId = teamId.toString()
+    )
 }
 
 object Projects : UUIDTable() {

@@ -9,6 +9,7 @@ import java.util.*
 
 @Serializable
 data class TeamDTO(
+    val id: String,
     val name: String,
     val description: String? = null,
     val dateCreated: Long
@@ -20,7 +21,12 @@ class Team(id: EntityID<UUID>) : UUIDEntity(id), SerializableEntity<TeamDTO> {
     var name: String by Teams.name
     var description: String? by Teams.description
     var dateCreated: Long by Teams.dateCreated
-    override fun createDTO(): TeamDTO = TeamDTO(name = name, description = description, dateCreated = dateCreated)
+    override fun createDTO() = TeamDTO(
+            id = id.toString(),
+            name = name,
+            description = description,
+            dateCreated = dateCreated
+        )
 }
 
 object Teams : UUIDTable("teams") {

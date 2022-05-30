@@ -15,7 +15,7 @@ interface SerializableEntity<T> {
 data class UserDTO(
     val id: String,
     val firstName: String? = null,
-    val lastName: String?,
+    val lastName: String? = null,
     val userName: String,
     val email: String,
     val avatar: String,
@@ -31,7 +31,7 @@ class User(id: EntityID<UUID>) : UUIDEntity(id), SerializableEntity<UserDTO> {
     var email: String by Users.email
     var avatar: String by Users.avatar
     var teamId: UUID? by Users.teamId
-    override fun createDTO(): UserDTO = UserDTO(
+    override fun createDTO() = UserDTO(
         id = id.toString(),
         firstName = firstName,
         lastName = lastName,
